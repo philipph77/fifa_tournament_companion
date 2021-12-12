@@ -1,10 +1,6 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<script>
-    // eslint-disable-next-line
-    $SCRIPT_ROOT = {{ request.script_root|tojson }};
-  </script>
 <script src= "{{ url_for('static', filename='js/admintools.js')}}"></script>
 {% endblock %}
 
