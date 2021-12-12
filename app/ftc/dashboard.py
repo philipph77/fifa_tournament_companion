@@ -12,14 +12,33 @@ from ftc.helper import calculateCardStats
 from ftc.helper import getWholeSchedule
 from ftc.helper import getUpcomingGames
 from ftc.helper import generateSchedule
+from ftc.helper import getMarketValueOfTeam
+from ftc.helper import getStrengthOfTeam
+from ftc.helper import getNextGamesOfTeam
 
 bp = Blueprint('dashboard', __name__)
 
 @bp.route('/')
 @login_required
 def index():
-    #Shows Hallo World and Description What to find where
-    return render_template('dashboard/index.html')
+    db = get_db()
+    teamName = g.user[5]
+    teamId = g.user[0]
+
+    table, _, _ = calculateTables(db)
+    tablePlace = table[table['Team']==teamName].index.values[0]
+    points = table[table['Team']==teamName].Points.values[0]
+    scoredGoals = table[table['Team']==teamName].Goals_For.values[0]
+    receivedGoals = table[table['Team']==teamName].Goals_Against.values[0]
+
+    marketValue = getMarketValueOfTeam(db, teamId)
+    teamStrength = getStrengthOfTeam(db, teamId)
+
+    nextGames = getNextGamesOfTeam(db, teamId)
+
+    players = db.execute('SELECT players.short_name, players.overall, players.player_face_url FROM team_player JOIN players ON players.ID=team_player.playerID WHERE team_player.teamID=?',(teamId,)).fetchall()
+
+    return render_template('dashboard/index.html', tablePlace=tablePlace, points=points, scoredGoals=scoredGoals, receivedGoals=receivedGoals, marketValue=marketValue, teamStrength=teamStrength, players=players, nextGames=nextGames)
 
 @bp.route('/standings')
 @login_required

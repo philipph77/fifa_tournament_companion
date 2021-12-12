@@ -133,14 +133,15 @@ def getWholeSchedule(db):
     
     return schedule
 
-def getUpcomingGames(db, n_games=10):
-    current_matchday = db.execute("SELECT MIN(MatchDay) FROM season WHERE Is_Finished = 0").fetchone()[0]
+def getUpcomingGames(db, n_games=20):
+    current_matchday = db.execute("SELECT MAX(MatchDay) FROM season WHERE Is_Finished = 1").fetchone()[0]
     upcoming_games = db.execute('''
         SELECT MatchDay, team1.TeamName, team2.TeamName
         FROM season
         LEFT JOIN gamer team1 ON season.HomeTeamID=team1.ID
         LEFT JOIN gamer team2 ON season.AwayTeamID=team2.ID
-        WHERE season.Is_Finished = 0 AND season.MatchDay = ?
+        WHERE season.Is_Finished = 0
+        AND season.MatchDay <= ?
         LIMIT ?'''
         ,(current_matchday, n_games)
     )
@@ -192,3 +193,23 @@ def generateSchedule(db, numSeasons, withReturnMatch):
                         db.execute('INSERT INTO season (HomeTeamID, AwayTeamID, MatchDay, IsFirstLeg, Season) VALUES (?, ?, ?, 0, ?)',(match[0], match[1], match_day_idx, season_idx))
     db.commit()
     return
+
+def getMarketValueOfTeam(db, teamId):
+    return db.execute('SELECT SUM(players.value_eur) FROM team_player JOIN players ON players.ID=team_player.playerID WHERE team_player.teamID=?',(teamId,)).fetchone()[0]
+
+def getStrengthOfTeam(db, teamId):
+    return db.execute('SELECT AVG(players.overall) FROM team_player JOIN players ON players.ID=team_player.playerID WHERE team_player.teamID=?',(teamId,)).fetchone()[0]
+
+def getNextGamesOfTeam(db, teamId):
+    res =  db.execute(
+                        '''SELECT MatchDay, team1.TeamName, team2.TeamName
+                        FROM season
+                        LEFT JOIN gamer team1 ON season.HomeTeamID=team1.ID
+                        LEFT JOIN gamer team2 ON season.AwayTeamID=team2.ID
+                        WHERE season.Is_Finished=0
+                        AND season.HomeTeamID=?
+                        OR season.AwayTeamID=?
+                        LIMIT 10''',
+                        (teamId, teamId)
+                    )
+    return pd.DataFrame(data=res.fetchall(), columns=[ 'MatchDay', 'HomeTeam', 'AwayTeam'])
