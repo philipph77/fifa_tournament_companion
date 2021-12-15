@@ -1,0 +1,4 @@
+include ftc/schema.sql
+graft ftc/static
+graft ftc/templates
+global-exclude *.pyc
