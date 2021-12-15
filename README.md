@@ -54,5 +54,9 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 Please make sure to update tests as appropriate.
 
+## Credits
+- [Windmill Template](https://github.com/estevanmaito/windmill-dashboard)
+- [Generate Season Algorithm](https://gist.github.com/ih84ds/be485a92f334c293ce4f1c84bfba54c9)
+
 ## License
 [CCO](https://choosealicense.com/licenses/cc0-1.0/)
