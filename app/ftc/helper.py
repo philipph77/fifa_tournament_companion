@@ -103,14 +103,14 @@ def calculateScorerStats(db):
     assist =db.execute('SELECT players.short_name, COUNT(*) AS `points` FROM goals LEFT JOIN players on players.ID = goals.Wingman_ID WHERE goals.was_Owngoal=0 GROUP BY Wingman_ID')
     assist = pd.DataFrame(data=assist.fetchall(), columns=['Player', 'Assists'])
     assist.sort_values('Assists', ascending=False, inplace=True)
-    penaldo = db.execute("SELECT players.short_name, COUNT(*) AS `points` FROM goals LEFT JOIN players on players.ID = goals.Scorer_ID WHERE goals.was_Owngoal=0 AND goals.was_Penalty=1 GROUP BY Scorer_ID")        
+    penaldo = db.execute('SELECT players.short_name, COUNT(*) AS `points` FROM goals LEFT JOIN players on players.ID = goals.Scorer_ID WHERE goals.was_Owngoal=0 AND goals.was_Penalty=1 GROUP BY Scorer_ID')        
     penaldo = pd.DataFrame(data=penaldo.fetchall(), columns=['Player', 'Penalties'])
     penaldo.sort_values('Penalties', ascending=False, inplace=True)
     
     return scorer, assist, penaldo
 
 def calculateCardStats(db):
-    gamer_ids = db.execute("SELECT ID FROM gamer").fetchall()
+    gamer_ids = db.execute('SELECT ID FROM gamer').fetchall()
     gamer_ids = [int(id[0]) for id in gamer_ids]
     yellow_cards = db.execute('SELECT players.short_name, COUNT(*) AS `points` FROM cards LEFT JOIN players on players.ID = cards.ReceivingPlayer WHERE cards.wasYellowCard=1 GROUP BY ReceivingPlayer')
     yellow_cards = pd.DataFrame(data=yellow_cards.fetchall(), columns=['Name', 'Yellow Cards'])
