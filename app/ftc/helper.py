@@ -195,10 +195,10 @@ def generateSchedule(db, numSeasons, withReturnMatch):
     return
 
 def getMarketValueOfTeam(db, teamId):
-    return db.execute('SELECT SUM(players.value_eur) FROM team_player JOIN players ON players.ID=team_player.playerID WHERE team_player.teamID=?',(teamId,)).fetchone()[0]
+    return db.execute('SELECT ifnull(SUM(players.value_eur), 0) FROM team_player JOIN players ON players.ID=team_player.playerID WHERE team_player.teamID=?',(teamId,)).fetchone()[0]
 
 def getStrengthOfTeam(db, teamId):
-    return db.execute('SELECT AVG(players.overall) FROM team_player JOIN players ON players.ID=team_player.playerID WHERE team_player.teamID=?',(teamId,)).fetchone()[0]
+    return db.execute('SELECT ifnull(AVG(players.overall), 0) FROM team_player JOIN players ON players.ID=team_player.playerID WHERE team_player.teamID=?',(teamId,)).fetchone()[0]
 
 def getNextGamesOfTeam(db, teamId):
     res =  db.execute(
