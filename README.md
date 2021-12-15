@@ -22,15 +22,15 @@ Now everything should be installed and ready to set up. You will have to set two
 export FLASK_APP=ftc
 export FLASK_ENV=development
 ```
-<i>NOTE: Only use the `development` for development purpose!</i>
+<i>NOTE: Only use the option `development` for development purposes!</i>
 
-Now you can try to initialize the database by running the command
+Navigate your terminal into the `app` folder an try to initialize the database by running the command
 ```bash
 flask init-db
 ```
 
 ## Usage
-If everythin is set up properly you can run the application with
+If everything is set up properly you can run the application with
 
 ```bash
 flask run

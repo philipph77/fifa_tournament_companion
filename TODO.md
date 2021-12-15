@@ -1,6 +1,7 @@
 # TODO
 
 ## Todo
+- [ ] App: Add Test Coverage
 - [ ] Admintools: Show Team of the Gamers
 - [ ] 403: Use Windmill 404 Template
 - [ ] Overview - Your Team: remove Orange Background from Player face-images, pull Strength to the right, Position to the left
