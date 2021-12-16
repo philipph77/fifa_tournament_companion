@@ -8,6 +8,6 @@
 {{ upcomingGames.to_html(index=False, classes="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800") | safe}}
 
 <h2 class="my-6 text-xl font-semibold text-gray-700 dark:text-gray-200">Whole Schedule</h2>
-{{ wholeSchedule.to_html(index=False, classes="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800") | safe}}
+{{ wholeSchedule.to_html(index=False, classes="w-full whitespace-no-wrap") | safe}}
 
 {% endblock %}
