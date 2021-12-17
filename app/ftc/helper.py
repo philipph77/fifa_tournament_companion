@@ -1,5 +1,7 @@
 import pandas as pd
-
+import requests
+from os import path
+import shutil
 
 def getTeamStats(db, gamerID):
     res = db.execute('SELECT (players.short_name, players.player_position, players.value_eur, age) FROM team_player JOIN players ON players.ID=team_player.playerID WHERE team_player.teamID = ?',(gamerID)).fetchall()
@@ -213,3 +215,14 @@ def getNextGamesOfTeam(db, teamId):
                         (teamId, teamId)
                     )
     return pd.DataFrame(data=res.fetchall(), columns=[ 'MatchDay', 'HomeTeam', 'AwayTeam'])
+
+def downloadPlayerImage(playerID, faceImageUrl):
+    filename = f"{playerID}.png"
+    r = requests.get(faceImageUrl, stream=True)
+    if r.status_code == 200:
+        with open(path.join("instance", "images", filename), 'wb') as f:
+            r.raw.decode_content = True
+            shutil.copyfileobj(r.raw, f)
+        return 1
+    else:
+        return 0

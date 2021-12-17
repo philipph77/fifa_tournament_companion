@@ -15,6 +15,7 @@ from ftc.helper import generateSchedule
 from ftc.helper import getMarketValueOfTeam
 from ftc.helper import getStrengthOfTeam
 from ftc.helper import getNextGamesOfTeam
+from ftc.helper import downloadPlayerImage
 
 bp = Blueprint('dashboard', __name__)
 
@@ -208,6 +209,9 @@ def add_player_to_team():
     if db.execute('SELECT COUNT(team_player.playerID) FROM team_player WHERE playerID = ?',(playerID,)).fetchone()[0]:
         flash("Player is already member of another Team!")
         return redirect(url_for('dashboard.admintools'))
+    faceImageUrl = db.execute('SELECT player_face_url from players WHERE ID=?',(playerID,)).fetchone()[0]
+    if not(downloadPlayerImage(playerID, faceImageUrl)):
+        flash("Player Image could not be downloaded")
     db.execute('INSERT INTO team_player (teamID, playerID) VALUES (?,?)',(teamID, playerID))
     db.commit()
     flash("Player was added successfully")
