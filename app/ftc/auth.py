@@ -62,7 +62,7 @@ def login():
         ).fetchone()
 
         if user is None:
-            error = f"No there is no user with this username"
+            error = f"There is no user with this username."
         elif not check_password_hash(user['Password'], password):
             error = 'Incorrect password.'
 
