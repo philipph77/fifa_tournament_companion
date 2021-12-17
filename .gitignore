@@ -7,7 +7,7 @@ __pycache__/
 
 instance/
 
-app/ftc/static/faces/*
+app/ftc/static/faces/*.png
 
 .pytest_cache/
 .coverage
