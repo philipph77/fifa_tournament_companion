@@ -9,7 +9,7 @@ First clone this repository
 git clone git@github.com:philipph77/fifa_tournament_companion.git
 ```
 
-Everything you need is located the `app` folder. Navigate to the folder with your terminal.
+Everything you need is located the `app` folder. Navigate your terminal into this folder.
 
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install FTC.
 
