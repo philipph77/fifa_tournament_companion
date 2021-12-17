@@ -220,7 +220,7 @@ def downloadPlayerImage(playerID, faceImageUrl):
     filename = f"{playerID}.png"
     r = requests.get(faceImageUrl, stream=True)
     if r.status_code == 200:
-        with open(path.join("instance", "images", filename), 'wb') as f:
+        with open(path.join("ftc", "static", "faces", filename), 'wb') as f:
             r.raw.decode_content = True
             shutil.copyfileobj(r.raw, f)
         return 1

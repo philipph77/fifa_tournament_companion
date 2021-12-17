@@ -37,7 +37,7 @@ def index():
 
     nextGames = getNextGamesOfTeam(db, teamId)
 
-    players = db.execute('SELECT players.short_name, players.overall, players.player_positions, players.player_face_url FROM team_player JOIN players ON players.ID=team_player.playerID WHERE team_player.teamID=?',(teamId,)).fetchall()
+    players = db.execute('SELECT players.short_name, players.overall, players.player_positions, players.ID FROM team_player JOIN players ON players.ID=team_player.playerID WHERE team_player.teamID=?',(teamId,)).fetchall()
 
     return render_template('dashboard/index.html', tablePlace=tablePlace, points=points, scoredGoals=scoredGoals, receivedGoals=receivedGoals, marketValue=marketValue, teamStrength=teamStrength, players=players, nextGames=nextGames)
 

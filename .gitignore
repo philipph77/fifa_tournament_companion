@@ -7,6 +7,8 @@ __pycache__/
 
 instance/
 
+app/ftc/static/faces/*
+
 .pytest_cache/
 .coverage
 htmlcov/
@@ -14,3 +16,5 @@ htmlcov/
 dist/
 build/
 *.egg-info/
+
+workspace.code-workspace
