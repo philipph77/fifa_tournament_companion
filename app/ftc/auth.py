@@ -32,7 +32,7 @@ def register():
         elif not password:
             error = 'Password is required.'
         elif not tournament_key == "BangerCup0707!":
-            error = "Wrong Tournament key. If you don't have the tournament key, ask your tournament admin"
+            error = "Wrong Tournament key. If you dont have the tournament key, ask your tournament admin"
 
         if error is None:
             try:
