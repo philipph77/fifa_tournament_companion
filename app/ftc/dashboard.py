@@ -89,8 +89,8 @@ def add_results():
         goalsData = []
         for i in range(1, homeGoals+1):
             try:
-                request.form['wasPenalty']
-            except KeyError:
+                request.form['wasPenalty-hg-%i'%i]
+            except BadRequestKeyError:
                 wasPenalty = 0
             else:
                 wasPenalty = 1
@@ -103,7 +103,7 @@ def add_results():
 
         for i in range(1, awayGoals+1):
             try:
-                request.form['wasPenalty']
+                request.form['wasPenalty-ag-%i'%i]
             except KeyError:
                 wasPenalty = 0
             else:

@@ -49,8 +49,12 @@ function addOneGoalsSelect(scoredTeamPlayers, receivedTeamPlayers, isHomeTeam, i
     var wasPenalty = document.createElement("input");
     wasPenalty.setAttribute("type", "checkbox");
     wasPenalty.setAttribute("value", "1");
-    wasPenalty.setAttribute("name", "wasPenalty")
-
+    if (isHomeTeam){
+        wasPenalty.setAttribute("name", "wasPenalty-hg-"+i)
+    }else{
+        wasPenalty.setAttribute("name", "wasPenalty-ag-"+i)
+    }
+    
     selectList.required = true;
     minuteInput.required = true;
 
