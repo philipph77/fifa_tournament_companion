@@ -68,7 +68,8 @@ def admintools():
     gamers = db.execute('SELECT ID, FirstName, TeamName FROM gamer').fetchall()
     playersPerTeam = db.execute('SELECT team_player.playerID, players.short_name, gamer.FirstName, gamer.TeamName FROM team_player JOIN players ON players.ID=team_player.playerID JOIN gamer ON gamer.ID = team_player.teamID').fetchall()
     unfinishedMatches = db.execute("SELECT season.MatchID, season.MatchDay, gamer1.TeamName, gamer2.TeamName, gamer1.FirstName, gamer2.FirstName, season.HomeTeamID, season.AwayTeamID FROM season JOIN gamer gamer1 ON gamer1.ID = season.HomeTeamID JOIN gamer gamer2 ON gamer2.ID = season.AwayTeamID WHERE season.Is_Finished=0").fetchall()
-    return render_template('dashboard/admintools.html', unfinishedMatches=unfinishedMatches, gamers=gamers, players=players, playersPerTeam=playersPerTeam)
+    finishedMatches = db.execute("SELECT season.MatchID, season.MatchDay, gamer1.TeamName, gamer2.TeamName, gamer1.FirstName, gamer2.FirstName, season.HomeTeamID, season.AwayTeamID FROM season JOIN gamer gamer1 ON gamer1.ID = season.HomeTeamID JOIN gamer gamer2 ON gamer2.ID = season.AwayTeamID WHERE season.Is_Finished=1").fetchall()
+    return render_template('dashboard/admintools.html', unfinishedMatches=unfinishedMatches, finishedMatches=finishedMatches, gamers=gamers, players=players, playersPerTeam=playersPerTeam)
 
 @bp.route('/admintools/add-results', methods=('POST',))
 @login_required
@@ -144,6 +145,41 @@ def add_results():
 
     return redirect(url_for('dashboard.admintools'))
 
+@bp.route('/admintools/delete-results', methods=('POST',))
+@login_required
+@admin_required
+def delete_results():
+    db = get_db()
+    if request.method == 'POST':
+        matchID = int(request.form['matchID'])
+    error = None
+    if not matchID:
+        error = 'Select a Match'
+        flash(error)
+        return redirect(url_for('dashboard.admintools'))
+
+    # Delete Match result
+    db.execute('UPDATE season SET HomeGoals=NULL, AwayGoals=NULL, Result=NULL, Is_Finished=0 WHERE MatchID=?',(matchID,))
+
+    events = db.execute('SELECT eventID, eventCategoryID FROM events WHERE MatchID=?',(matchID,)).fetchall()
+
+    for event in events:
+        if event['eventCategoryID'] == 1:
+            # Delete Goal
+            db.execute('DELETE FROM goals WHERE ID=?',(event['eventID'],))
+        elif event['eventCategoryID'] == 2:
+            # Delete Card
+            db.execute('DELETE FROM cards WHERE ID=?',(event['eventID'],))
+        else:
+            flash(r"Unknown Event Category: {event['eventCategoryID']}")
+    
+    db.execute('DELETE FROM events WHERE MatchID=?',(matchID,))
+
+    db.commit()
+    flash("Result deleted successfully")
+
+    return redirect(url_for('dashboard.admintools'))
+
 @bp.route('/admintools/generate-schedule', methods=('POST',))
 @login_required
 @admin_required
@@ -176,6 +212,9 @@ def generate_schedule():
 def delete_schedule():
     db = get_db()
     db.execute("DELETE FROM season")
+    db.execute("DELETE FROM events")
+    db.execute("DELETE FROM goals")
+    db.execute("DELETE FROM cards")
     db.commit()
     flash("Schedule deleted successfully")
     return redirect(url_for('dashboard.admintools'))        

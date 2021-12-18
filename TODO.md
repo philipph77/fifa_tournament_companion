@@ -13,3 +13,5 @@
 - [x] Overview - Your Team: remove Orange Background from Player face-images, add Player Position
 - [x] App: Add Basic Test Coverage
 - [x] App: Download Face-images of players when the get added to a team to `Instance/Images/Playerfaces/{{PLAYERID}}.png`
+- [x] Admintools: Improve Styling
+- [x] Admintools: Add DeleteResult

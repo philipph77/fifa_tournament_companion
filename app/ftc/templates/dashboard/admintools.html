@@ -43,7 +43,23 @@
     </form>
 </div>
 
-
+<!-- Delete Result -->
+<div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+    <h2 class="my-6 text-xl font-semibold text-gray-700 dark:text-gray-200">Delete Result</h2>
+    <form id="delete_results" action="{{url_for('dashboard.delete_results')}}" method="post">
+        <label for="matchID" class="text-sm block">
+            <span class="text-gray-700 dark:text-gray-400 block">Match</span>
+            <select name="matchID" id="matchIDSelector" class="select2Dropdown" onchange="resetGoalInputs(); deleteAllGoalsSelections(); deleteAllCardsSelections(); resetCardInputs();"
+            style="width:75%" required>
+                {% for finishedMatch in finishedMatches %}
+                <option value="{{finishedMatch[0]}}">[{{finishedMatch[1]}}] {{finishedMatch[2]}}({{finishedMatch[4]}}) vs. {{finishedMatch[3]}}({{finishedMatch[5]}})</option>
+                {% endfor %}
+            </select>
+        </label>
+        <input type="submit" value="Delete Result"
+        class="px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple" />
+    </form>
+</div>
 
 <!-- Generate/Delete Schedule -->
 <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
