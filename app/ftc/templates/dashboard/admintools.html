@@ -10,75 +10,117 @@
 <h1 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">Admin Tools</h1>
 
 <!-- Add Results (Aggregate, Goals, Cards)-->
-<h2 class="my-6 text-xl font-semibold text-gray-700 dark:text-gray-200">Add Results</h2>
-<form id="add_results" action="{{url_for('dashboard.add_results')}}" method="post">
-<select name="matchID" id="matchIDSelector" class="select2Dropdown" onchange="resetGoalInputs(); deleteAllGoalsSelections(); deleteAllCardsSelections(); resetCardInputs();" required>
-    {% for unfinishedMatch in unfinishedMatches %}
-    <option value="{{unfinishedMatch[0]}}">[{{unfinishedMatch[1]}}] {{unfinishedMatch[2]}}({{unfinishedMatch[4]}}) vs. {{unfinishedMatch[3]}}({{unfinishedMatch[5]}})</option>
-    {% endfor %}
-</select>
-<input type="number" name="homeGoals" id="homeGoalsInput" min="0" value="0" onchange="adjustNumberofGoalSelections(1);" required />
-<input type="number" name="awayGoals" id="awayGoalsInput" min="0" value="0" onchange="adjustNumberofGoalSelections(0);" required />
-<input type="number" name="cards" id="cardsInput" min="0" value="0" onchange="adjustNumberofCards()" required />
-<h3 class="my-6 text-l font-semibold text-gray-700 dark:text-gray-200">Home Goals</h3>
-<div id="homeGoalsInputWrapper" class="block"></div>
-<h3 class="my-6 text-l font-semibold text-gray-700 dark:text-gray-200">Away Goals</h3>
-<div id="awayGoalsInputWrapper" class="block"></div>
-<h3 class="my-6 text-l font-semibold text-gray-700 dark:text-gray-200">Cards</h3>
-<div id="cardsInputWrapper" class="block"></div>
+<div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+    <h2 class="my-6 text-xl font-semibold text-gray-700 dark:text-gray-200">Add Results</h2>
+    <form id="add_results" action="{{url_for('dashboard.add_results')}}" method="post">
+        <label for="matchID" class="text-sm block">
+            <span class="text-gray-700 dark:text-gray-400 block">Match</span>
+            <select name="matchID" id="matchIDSelector" class="select2Dropdown" onchange="resetGoalInputs(); deleteAllGoalsSelections(); deleteAllCardsSelections(); resetCardInputs();" required>
+                {% for unfinishedMatch in unfinishedMatches %}
+                <option value="{{unfinishedMatch[0]}}">[{{unfinishedMatch[1]}}] {{unfinishedMatch[2]}}({{unfinishedMatch[4]}}) vs. {{unfinishedMatch[3]}}({{unfinishedMatch[5]}})</option>
+                {% endfor %}
+            </select>
+        </label>
+        <label for="" class="text-sm block py-4">
+            <span class="text-gray-700 dark:text-gray-400 block">Aggregate</span>
+            <input type="number" name="homeGoals" id="homeGoalsInput" min="0" value="0" onchange="adjustNumberofGoalSelections(1);" style="width: 100px" required />
+            <input type="number" name="awayGoals" id="awayGoalsInput" min="0" value="0" onchange="adjustNumberofGoalSelections(0);" style="width: 100px" required />
+        </label>
+        <label for="cards" class="text-sm block py-4">
+            <span class="text-gray-700 dark:text-gray-400 block">Number of Cards in the Match</span>
+            <input type="number" name="cards" id="cardsInput" min="0" value="0" onchange="adjustNumberofCards()" style="width: 100px" required />
+        </label>
+        <h3 class="my-6 text-l font-semibold text-gray-700 dark:text-gray-200">Home Goals</h3>
+        <div id="homeGoalsInputWrapper" class="block"></div>
+        <h3 class="my-6 text-l font-semibold text-gray-700 dark:text-gray-200">Away Goals</h3>
+        <div id="awayGoalsInputWrapper" class="block"></div>
+        <h3 class="my-6 text-l font-semibold text-gray-700 dark:text-gray-200">Cards</h3>
+        <div id="cardsInputWrapper" class="block"></div>
+        
+        <input type="submit" value="Add Result"
+        class="px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple" />
+    </form>
+</div>
 
-<input type="submit" value="Add Result" class="px-5 py-3 font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple" />
-</form>
+
 
 <!-- Generate/Delete Schedule -->
-<h2 class="my-6 text-xl font-semibold text-gray-700 dark:text-gray-200">Generate/Delete Schedule</h2>
-<form action="{{url_for('dashboard.generate_schedule')}}" method="post">
-    <input type="number" name="numSeasons" class="mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input" min="1", max="10" required/>
-    <input type="checkbox" name="withReturnMatch" value="1"/>
-    <input type="submit" name="submit" value="Generate schedule" class="px-5 py-3 font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"/>
-</form>
+<div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+    <h2 class="my-6 text-xl font-semibold text-gray-700 dark:text-gray-200">Generate/Delete Schedule</h2>
+    <form action="{{url_for('dashboard.generate_schedule')}}" method="post">
+        <label for="numSeasons" class="text-sm block py-4">
+            <span class="text-gray-700 dark:text-gray-400">Number of Seasons:</span>
+            <input type="number" name="numSeasons" class="mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input" min="1", max="10" required/>
+        </label>
+        <label for="withReturnMatch" class="text-sm block py-4">
+            <span class="text-gray-700 dark:text-gray-400">With Return Match?</span>
+            <input type="checkbox" name="withReturnMatch" value="1"/>
+        </label>
+        <input type="submit" name="submit" value="Generate schedule"
+        class=" block px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"/>
+    </form>
+    <br />
+    <form action="{{url_for('dashboard.delete_schedule')}}" method="post">
+        <label for="submit" class="text-sm block py-4">
+            <span class="text-gray-700 dark:text-gray-400">Do you want to delete the current schedule?</span>
+            <input type="submit" name="submit" value="Delete schedule" onclick="return confirm('Are you sure you want to delete the schedule?');"
+            class="block px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"/>
+        </label>
+    </form>
+</div>
 
-<form action="{{url_for('dashboard.delete_schedule')}}" method="post">
-    <input type="submit" name="submit" value="Delete schedule" class="px-5 py-3 font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple" onclick="return confirm('Are you sure you want to delete the schedule?');"/>
-</form>
+
 
 <!-- Add Player to Team -->
-<h2 class="my-6 text-xl font-semibold text-gray-700 dark:text-gray-200">Add Player to Team</h2>
-<form action="{{ url_for('dashboard.add_player_to_team') }}"  method="post">
-    <select name="teamID">
-        {%for gamer in gamers %}
-            <option value="{{gamer[0]}}">{{gamer[1]}} ({{gamer[2]}})</option>
-        {% endfor %}
-    </select>
-    <select name="playerID" id="playerID" class="asyncPlayerSelect" style="width:100%;" placeholder="type a number, scroll for more results" required>
-    </select>
-    <input type="submit" name="submit" value="Add"/>
-</form>
-
-<!-- Delete Player from Team -->
-<h2 class="my-6 text-xl font-semibold text-gray-700 dark:text-gray-200">Delete Player from Team</h2>
-<form action="{{url_for('dashboard.delete_player_from_team')}}" method="post">
-    <select name="playerID" class="select2Dropdown">
-        {% for player in playersPerTeam %}
-        <!-- playersPerTeam: playerID, playerShortName, GamerName, TeamName-->
-            <option value="{{player[0]}}">{{player[1]}} [{{player[2]}} / {{player[3]}}]</option>
-        {% endfor %}
-    </select>
-    <input type="submit" name="submit" value="Delete" onclick="return confirm('Are you sure you want to delete this player?');"/>
-</form>
-
-<!-- Delete Gamer from Tournament -->
-<h2 class="my-6 text-xl font-semibold text-gray-700 dark:text-gray-200">Delete Gamer from Tournament</h2>
-<form action="{{url_for('dashboard.delete_gamer_from_tournament')}}" method="post">
-    <select name="gamerID">
-        {%for gamer in gamers %}
+<div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+    <h2 class="my-6 text-xl font-semibold text-gray-700 dark:text-gray-200">Add Player to Team</h2>
+    <form action="{{ url_for('dashboard.add_player_to_team') }}"  method="post">
+        <select name="teamID">
+            {%for gamer in gamers %}
                 <option value="{{gamer[0]}}">{{gamer[1]}} ({{gamer[2]}})</option>
             {% endfor %}
-    </select>
-    <input type="submit" name="submit" value="Delete" onclick="return confirm('Are you sure you want to delete this player?');"/>
-</form>
+        </select>
+        <select name="playerID" id="playerID" class="asyncPlayerSelect" style="width:50%" placeholder="type a number, scroll for more results" required>
+        </select>
+        <input type="submit" name="submit" value="Add" class="px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"/>
+    </form>
+</div>
+
+<!-- Delete Player from Team -->
+<div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+    <h2 class="my-6 text-xl font-semibold text-gray-700 dark:text-gray-200">Delete Player from Team</h2>
+    <form action="{{url_for('dashboard.delete_player_from_team')}}" method="post">
+        <select name="playerID" class="select2Dropdown">
+            {% for player in playersPerTeam %}
+            <!-- playersPerTeam: playerID, playerShortName, GamerName, TeamName-->
+                <option value="{{player[0]}}">{{player[1]}} [{{player[2]}} / {{player[3]}}]</option>
+            {% endfor %}
+        </select>
+        <input type="submit" name="submit" value="Delete" onclick="return confirm('Are you sure you want to delete this player?');"
+        class="px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+        />
+    </form>
+</div>
+
+<!-- Delete Gamer from Tournament -->
+<div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+    <h2 class="my-6 text-xl font-semibold text-gray-700 dark:text-gray-200">Delete Gamer from Tournament</h2>
+    <form action="{{url_for('dashboard.delete_gamer_from_tournament')}}" method="post">
+        <select name="gamerID">
+            {%for gamer in gamers %}
+                    <option value="{{gamer[0]}}">{{gamer[1]}} ({{gamer[2]}})</option>
+                {% endfor %}
+        </select>
+        <input type="submit" name="submit" value="Delete" onclick="return confirm('Are you sure you want to delete this player?');"
+        class="px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+        />
+    </form>
+</div>
 
 <!-- Dump / Load DB -->
-<h2 class="my-6 text-xl font-semibold text-gray-700 dark:text-gray-200">Dump / Load DB</h2>
+<div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+    <h2 class="my-6 text-xl font-semibold text-gray-700 dark:text-gray-200">Dump / Load DB</h2>
+    <p class="text-sm text-gray-600 dark:text-gray-400">Coming soon...</p>
+</div>
 
 {% endblock %}
