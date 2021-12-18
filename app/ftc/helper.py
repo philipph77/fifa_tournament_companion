@@ -102,7 +102,7 @@ def calculateScorerStats(db):
     scorer = db.execute('SELECT players.short_name, COUNT(*) AS `points` FROM goals LEFT JOIN players on players.ID = goals.Scorer_ID WHERE goals.was_Owngoal=0 GROUP BY Scorer_ID')
     scorer = pd.DataFrame(data=scorer.fetchall(), columns=['Player', 'Goals'])
     scorer.sort_values('Goals', ascending=False, inplace=True)
-    assist =db.execute('SELECT players.short_name, COUNT(*) AS `points` FROM goals LEFT JOIN players on players.ID = goals.Wingman_ID WHERE goals.was_Owngoal=0 GROUP BY Wingman_ID')
+    assist =db.execute('SELECT players.short_name, COUNT(*) AS `points` FROM goals LEFT JOIN players on players.ID = goals.Wingman_ID WHERE goals.was_Owngoal=0 AND goals.Wingman_ID IS NOT NULL GROUP BY Wingman_ID')
     assist = pd.DataFrame(data=assist.fetchall(), columns=['Player', 'Assists'])
     assist.sort_values('Assists', ascending=False, inplace=True)
     penaldo = db.execute('SELECT players.short_name, COUNT(*) AS `points` FROM goals LEFT JOIN players on players.ID = goals.Scorer_ID WHERE goals.was_Owngoal=0 AND goals.was_Penalty=1 GROUP BY Scorer_ID')        
