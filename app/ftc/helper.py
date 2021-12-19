@@ -129,13 +129,12 @@ def calculateCardStats(db):
 
 def getWholeSchedule(db):
     schedule = db.execute('''
-        SELECT MatchDay, team1.TeamName, team2.TeamName
+        SELECT MatchDay, team1.TeamName, team2.TeamName, ifnull(HomeGoals, '-' ), ifnull(AwayGoals, '-' )
         FROM season
         LEFT JOIN gamer team1 ON season.HomeTeamID=team1.ID
         LEFT JOIN gamer team2 ON season.AwayTeamID=team2.ID
-        WHERE season.Is_Finished = 0
     ''')
-    schedule = pd.DataFrame(data=schedule.fetchall(), columns=[ 'MatchDay', 'HomeTeam', 'AwayTeam'])
+    schedule = pd.DataFrame(data=schedule.fetchall(), columns=[ 'MatchDay', 'HomeTeam', 'AwayTeam', 'HomeGoals', 'AwayGoals'])
     
     return schedule
 
