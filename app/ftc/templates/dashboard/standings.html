@@ -6,30 +6,30 @@
 <h1 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">Standings</h1>
 <!-- table=table, homeTable=homeTable, awayTable=awayTable, scorerTable=scorerTable, assistTable=assistTable, penaldoTable=penaldoTable, yellowCards=yellowCards, redCards=redCards -->
 <h2 class="my-6 text-xl font-semibold text-gray-700 dark:text-gray-200">Overall Table</h2>
-{{ table.to_html(classes="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800") | safe}}
+{{ table.to_html(classes="w-full whitespace-no-wrap") | safe}}
 
 <h2 class="my-6 text-xl font-semibold text-gray-700 dark:text-gray-200">Home Table</h2>
-{{ homeTable.to_html(classes="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800") | safe}}
+{{ homeTable.to_html(classes="w-full whitespace-no-wrap") | safe}}
 
 <h2 class="my-6 text-xl font-semibold text-gray-700 dark:text-gray-200">Away Table</h2>
-{{ awayTable.to_html(classes="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800") | safe}}
+{{ awayTable.to_html(classes="w-full whitespace-no-wrap") | safe}}
 
 <h2 class="my-6 text-xl font-semibold text-gray-700 dark:text-gray-200">Top Scorer</h2>
-{{ scorerTable.to_html(classes="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800") | safe}}
+{{ scorerTable.to_html(classes="w-full whitespace-no-wrap") | safe}}
 
 <!--
 <h2 class="my-6 text-xl font-semibold text-gray-700 dark:text-gray-200">Top Assist</h2>
-{{ assistTable.to_html(classes="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800") | safe}}
+{{ assistTable.to_html(classes="w-full whitespace-no-wrap") | safe}}
 -->
 
 <h2 class="my-6 text-xl font-semibold text-gray-700 dark:text-gray-200">Top Penaldo</h2>
-{{ penaldoTable.to_html(classes="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800") | safe}}
+{{ penaldoTable.to_html(classes="w-full whitespace-no-wrap") | safe}}
 
 <h2 class="my-6 text-xl font-semibold text-gray-700 dark:text-gray-200">Yellow Cards</h2>
-{{ yellowCards.to_html(classes="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800") | safe}}
+{{ yellowCards.to_html(classes="w-full whitespace-no-wrap") | safe}}
 
 <h2 class="my-6 text-xl font-semibold text-gray-700 dark:text-gray-200">Red Cards</h2>
-{{ redCards.to_html(classes="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800") | safe}}
+{{ redCards.to_html(classes="w-full whitespace-no-wrap") | safe}}
 
 
 {% endblock %}
