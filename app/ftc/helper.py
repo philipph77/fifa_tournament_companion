@@ -130,13 +130,15 @@ def getWholeSchedule(db):
         FROM season
         LEFT JOIN gamer team1 ON season.HomeTeamID=team1.ID
         LEFT JOIN gamer team2 ON season.AwayTeamID=team2.ID
+        WHERE season.Is_Finished = 0
     ''')
     schedule = pd.DataFrame(data=schedule.fetchall(), columns=[ 'MatchDay', 'HomeTeam', 'AwayTeam'])
     
     return schedule
 
 def getUpcomingGames(db, n_games=20):
-    current_matchday = db.execute("SELECT MAX(MatchDay) FROM season WHERE Is_Finished = 1").fetchone()[0]
+    current_matchday = db.execute("SELECT MIN(MatchDay) FROM season WHERE Is_Finished = 0").fetchone()[0]
+    print(f"Current Machtday {current_matchday}")
     upcoming_games = db.execute('''
         SELECT MatchDay, team1.TeamName, team2.TeamName
         FROM season
