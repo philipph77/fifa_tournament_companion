@@ -24,8 +24,12 @@ def close_db(e=None):
 
 def init_db():
     db = get_db()
-
     with current_app.open_resource('schema.sql') as f:
+        db.executescript(f.read().decode('utf8'))
+
+def load_players():
+    db = get_db()
+    with current_app.open_resource('players21.sql') as f:
         db.executescript(f.read().decode('utf8'))
 
 
@@ -36,6 +40,14 @@ def init_db_command():
     init_db()
     click.echo('Initialized the database.')
 
+@click.command('load-players')
+@with_appcontext
+def load_players_command():
+    """Load the FIFA21 players."""
+    load_players()
+    click.echo('Players loaded.')
+
 def init_app(app):
     app.teardown_appcontext(close_db)
     app.cli.add_command(init_db_command)
+    app.cli.add_command(load_players_command)

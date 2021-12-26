@@ -36,10 +36,8 @@ def register():
 
         if error is None:
             try:
-                db.execute(
-                    "INSERT INTO gamer (FirstName, LastName, UserName, Password, TeamName) VALUES (?, ?, ?, ?, ?)",
-                    (firstname, lastname, username, generate_password_hash(password), teamname),
-                )
+                userID = db.execute("INSERT INTO user (UserName, Password) VALUES (?,?) RETURNING ID",(username, generate_password_hash(password))).fetchone()[0]
+                db.execute("INSERT INTO gamer(UserID, FirstName, LastName, TeamName) VALUES (?,?,?,?)",(userID, firstname, lastname, teamname))
                 db.commit()
             except db.IntegrityError:
                 error = f"Something went wrong. Either the username {username} or the teamname {teamname} is already registered. Try to choose another one. If the error keeps occuring, please contact the admin."
@@ -58,7 +56,7 @@ def login():
         db = get_db()
         error = None
         user = db.execute(
-            'SELECT * FROM gamer WHERE username = ?', (username,)
+            'SELECT * FROM user WHERE username = ?', (username,)
         ).fetchone()
 
         if user is None:
@@ -83,8 +81,11 @@ def load_logged_in_user():
         g.user = None
     else:
         g.user = get_db().execute(
-            'SELECT * FROM gamer WHERE ID = ?', (user_id,)
+            'SELECT * FROM gamer WHERE UserID = ?', (user_id,)
         ).fetchone()
+        g.isAdmin = get_db().execute(
+            'SELECT isAdmin FROM user WHERE ID = ?',(user_id,)
+        ).fetchone()[0]
 
 @bp.route('/logout')
 def logout():
@@ -108,10 +109,8 @@ def login_required(view):
 def admin_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
-        if not(g.user[6]):
-            print(g.user[6])
+        if not(g.isAdmin==1):
             return redirect(url_for('auth.forbidden'))
-
         return view(**kwargs)
 
     return wrapped_view
