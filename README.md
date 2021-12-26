@@ -17,10 +17,15 @@ Use the package manager [pip](https://pip.pypa.io/en/stable/) to install FTC.
 pip install .
 ```
 
-Now everything should be installed and ready to set up. You will have to set two variables using
+Now everything should be installed and ready to set up. You will have to set two variables using (on Mac):
 ```bash
 export FLASK_APP=ftc
 export FLASK_ENV=development
+```
+or (on Windows):
+```bash
+set FLASK_APP=ftc
+set FLASK_ENV=development
 ```
 <i>NOTE: Only use the option `development` for development purposes!</i>
 
