@@ -134,6 +134,43 @@
     </form>
 </div>
 
+<!-- Add Gamer to Tournament -->
+<div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+    <h2 class="my-6 text-xl font-semibold text-gray-700 dark:text-gray-200">Add Gamer to Tournament</h2>
+    <form action="{{url_for('dashboard.add_gamer_to_tournament')}}" method="post">
+        <label class="block text-sm">
+            <span class="text-gray-700 dark:text-gray-400">First Name</span>
+            <input
+              class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+              name="firstName"
+              placeholder="First Name"
+              required
+            />
+        </label>
+        <label class="block text-sm">
+            <span class="text-gray-700 dark:text-gray-400">Last Name</span>
+            <input
+              class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+              name="lastName"
+              placeholder="Last Name"
+              required
+            />
+        </label>
+        <label class="block text-sm">
+            <span class="text-gray-700 dark:text-gray-400">Team Name</span>
+            <input
+              class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+              name="teamName"
+              placeholder="Team Name"
+              required
+            />
+        </label>
+        <input type="submit" name="submit" value="Add"
+        class="px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+        />
+    </form>
+</div>
+
 <!-- Dump / Load DB -->
 <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
     <h2 class="my-6 text-xl font-semibold text-gray-700 dark:text-gray-200">Dump / Load DB</h2>

@@ -288,10 +288,41 @@ def delete_gamer_from_tournament():
             return redirect(url_for('dashboard.admintools'))
     
     db = get_db()
-    if db.execute('SELECT isAdmin FROM gamer WHERE ID =?',(gamerID,)).fetchone()[0]:
-        flash("Can't delete Gamer, as this Gamer is an admin")
+    if db.execute('SELECT gamer.userID FROM gamer WHERE gamer.ID=?', (gamerID,)).fetchone()[0]==0:
+        db.execute('DELETE FROM gamer WHERE ID = ?',(gamerID,))
+        db.commit()
+        flash("Gamer deleted successfully")
         return redirect(url_for('dashboard.admintools'))
-    db.execute('DELETE FROM gamer WHERE ID = ?',(gamerID,))
+    else:
+        if db.execute('SELECT user.isAdmin FROM gamer JOIN user ON user.ID=gamer.userID WHERE gamer.ID =?',(gamerID,)).fetchone()[0]==1:
+            flash("Can't delete Gamer, as this Gamer is an admin")
+            return redirect(url_for('dashboard.admintools'))
+        db.execute('DELETE FROM gamer WHERE ID = ?',(gamerID,))
+        db.commit()
+        flash("Gamer deleted successfully")
+        return redirect(url_for('dashboard.admintools'))
+
+@bp.route('/admintools/add-gamer-to-tournament', methods=('POST',))
+@login_required
+@admin_required
+def add_gamer_to_tournament():
+    if request.method == 'POST':
+        firstName = request.form['firstName']
+        lastName = request.form['lastName']
+        teamName = request.form['teamName']
+        error = None
+        if not firstName:
+            error = 'Firstname is required.'
+        if not lastName:
+            error = 'Lastname is required.'
+        if not teamName:
+            error = 'Teamname is required.'
+        if error is not None:
+            flash(error)
+            return redirect(url_for('dashboard.admintools'))
+    
+    db = get_db()
+    db.execute("INSERT INTO gamer (FirstName, LastName, TeamName) VALUES(?,?,?)",(firstName, lastName, teamName))
     db.commit()
-    flash("Gamer deleted successfully")
+    flash("Gamer added successfully")
     return redirect(url_for('dashboard.admintools'))
