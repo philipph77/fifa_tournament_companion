@@ -1,3 +1,4 @@
+from os import environ
 import functools
 
 from flask import (
@@ -31,7 +32,7 @@ def register():
             error = 'Teamname is required.'
         elif not password:
             error = 'Password is required.'
-        elif not tournament_key == "BangerCup0707!":
+        elif not tournament_key == environ.get('TOURNAMENT_KEY'):
             error = "Wrong Tournament key. If you dont have the tournament key, ask your tournament admin"
 
         if error is None:
