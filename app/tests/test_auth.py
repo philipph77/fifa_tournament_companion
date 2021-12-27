@@ -17,7 +17,6 @@ def test_register(client, app):
 
 
 @pytest.mark.parametrize(('firstname', 'lastname', 'username', 'teamname', 'password', 'tournament_key', 'message'), (
-    # TODO: alle cases abdecken!
     ('', '', '', '', '', '', b'Firstname is required.'),
     ('Vax', '', '', '', '', '', b'Lastname is required.'),
     ('Vax', 'Merstappen', '', '', '', '', b'Username is required.'),
