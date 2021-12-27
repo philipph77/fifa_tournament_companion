@@ -79,10 +79,10 @@ def load_logged_in_user():
 
     if user_id is None:
         g.user = None
+        g.gamer = None
     else:
-        g.user = get_db().execute(
-            'SELECT * FROM gamer WHERE UserID = ?', (user_id,)
-        ).fetchone()
+        g.user = get_db().execute('SELECT * FROM user WHERE ID = ?', (user_id,)).fetchone()
+        g.gamer = get_db().execute('SELECT * FROM gamer WHERE UserID = ?', (user_id,)).fetchone()
         g.isAdmin = get_db().execute(
             'SELECT isAdmin FROM user WHERE ID = ?',(user_id,)
         ).fetchone()[0]

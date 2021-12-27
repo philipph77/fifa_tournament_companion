@@ -23,8 +23,8 @@ bp = Blueprint('dashboard', __name__)
 @login_required
 def index():
     db = get_db()
-    teamName = g.user['TeamName']
-    teamId = g.user['ID']
+    teamName = g.gamer['TeamName']
+    teamId = g.gamer['ID']
 
     table, _, _ = calculateTables(db)
     tablePlace = table[table['Team']==teamName].index.values[0]
