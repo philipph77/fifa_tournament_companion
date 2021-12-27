@@ -87,7 +87,7 @@ def load_logged_in_user():
         g.gamer = get_db().execute('SELECT * FROM gamer WHERE UserID = ?', (user_id,)).fetchone()
         g.isAdmin = get_db().execute(
             'SELECT isAdmin FROM user WHERE ID = ?',(user_id,)
-        ).fetchone()[0]
+        ).fetchone()
 
 @bp.route('/logout')
 def logout():
@@ -111,7 +111,7 @@ def login_required(view):
 def admin_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
-        if not(g.isAdmin==1):
+        if not(g.isAdmin[0]==1):
             return redirect(url_for('auth.forbidden'))
         return view(**kwargs)
 
