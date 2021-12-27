@@ -12,7 +12,7 @@ def test_register(client, app):
 
     with app.app_context():
         assert get_db().execute(
-            "SELECT * FROM gamer WHERE username = 'johndoe77'",
+            "SELECT * FROM user WHERE UserName = 'johndoe77'",
         ).fetchone() is not None
 
 
@@ -52,7 +52,6 @@ def test_login(client, auth):
         client.get('/')
         assert session['user_id'] == 1
         assert g.user['username'] == 'johndoe77'
-
 
 
 @pytest.mark.parametrize(('username', 'password', 'message'), (
