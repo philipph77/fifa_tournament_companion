@@ -36,7 +36,6 @@ function adjustTableDataClass(tdElems){
         tdElems[i].classList.add("py-3")
         tdElems[i].classList.add("text-sm")
     }
-    console.log(tdElems)
 }
 
 // px-4 py-3 text-sm
