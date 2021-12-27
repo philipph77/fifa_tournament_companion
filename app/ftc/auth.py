@@ -70,16 +70,19 @@ def login():
             return redirect(url_for('index'))
 
         flash(error)
-
+    else:
+        session.clear()
     return render_template('auth/login.html')
 
 @bp.before_app_request
 def load_logged_in_user():
     user_id = session.get('user_id')
+    print(user_id)
 
     if user_id is None:
         g.user = None
         g.gamer = None
+        g.isAdmin = None
     else:
         g.user = get_db().execute('SELECT * FROM user WHERE ID = ?', (user_id,)).fetchone()
         g.gamer = get_db().execute('SELECT * FROM gamer WHERE UserID = ?', (user_id,)).fetchone()
