@@ -34,6 +34,13 @@ Navigate your terminal into the `app` folder an try to initialize the database b
 flask init-db
 ```
 
+Finally you can load the player into the database with the command
+```bash
+flask load-players 22
+````
+<i>Note: The argument 22 specifies that you want to use the FIFA22 players. You can also choose to use the FIFA21 players</i>
+
+
 ## Usage
 If everything is set up properly you can run the application with
 
