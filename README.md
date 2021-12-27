@@ -17,7 +17,7 @@ Use the package manager [pip](https://pip.pypa.io/en/stable/) to install FTC.
 pip install .
 ```
 
-Now everything should be installed and ready to set up. You will have to set two variables using (on Mac):
+<!-- Now everything should be installed and ready to set up. You will have to set two variables using (on Mac):
 ```bash
 export FLASK_APP=ftc
 export FLASK_ENV=development
@@ -27,7 +27,7 @@ or (on Windows):
 set FLASK_APP=ftc
 set FLASK_ENV=development
 ```
-<i>NOTE: Only use the option `development` for development purposes!</i>
+<i>NOTE: Only use the option `development` for development purposes!</i> -->
 
 Navigate your terminal into the `app` folder an try to initialize the database by running the command
 ```bash
@@ -43,7 +43,6 @@ flask load-players 22
 
 ## Usage
 If everything is set up properly you can run the application with
-
 ```bash
 flask run
 ```
