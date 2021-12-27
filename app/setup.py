@@ -9,6 +9,7 @@ setup(
     install_requires=[
         'flask',
         'pandas',
-        'requests'
+        'requests',
+        'python-dotenv'
     ],
 )
