@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS "cards";
 CREATE TABLE IF NOT EXISTS "cards" (
 	"ID"	INTEGER NOT NULL UNIQUE,
 	"ReceivingPlayer"	INTEGER NOT NULL,
-	"wasYellowCard"	INTEGER,
+	"cardCategory"	INTEGER,
 	PRIMARY KEY("ID" AUTOINCREMENT)
 );
 DROP TABLE IF EXISTS "team_player";

@@ -160,7 +160,7 @@ function addOneCardsSelect(homePlayers, awayPlayers, i){
 
     selectList.setAttribute("name", "cardPlayer-"+i)
 
-    wasYellowCardSelect.setAttribute("name", "cardWasYellow-"+i)
+    wasYellowCardSelect.setAttribute("name", "cardCategory-"+i)
 
     minuteInput.required = true;
     selectList.required = true;
@@ -175,7 +175,11 @@ function addOneCardsSelect(homePlayers, awayPlayers, i){
     option.text = "Yellow";
     wasYellowCardSelect.appendChild(option);
     var option = document.createElement("option");
-    option.setAttribute("value", 0);
+    option.setAttribute("value", 3);
+    option.text = "Yellow-Red";
+    wasYellowCardSelect.appendChild(option);
+    var option = document.createElement("option");
+    option.setAttribute("value", 5);
     option.text = "Red";
     wasYellowCardSelect.appendChild(option);
 
