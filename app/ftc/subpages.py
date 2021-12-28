@@ -21,8 +21,8 @@ def matchReport():
 
     homeTeam = db.execute("SELECT gamer.TeamName FROM season JOIN gamer on gamer.ID=season.HomeTeamID WHERE season.MatchID=?",(matchID,)).fetchone()[0]
     awayTeam = db.execute("SELECT gamer.TeamName FROM season JOIN gamer on gamer.ID=season.AwayTeamID WHERE season.MatchID=?",(matchID,)).fetchone()[0]
-    homeGoals = db.execute("SELECT season.HomeGoals FROM season WHERE season.MatchID=110").fetchone()[0]
-    awayGoals = db.execute("SELECT season.AwayGoals FROM season WHERE season.MatchID=110").fetchone()[0]
+    homeGoals = db.execute("SELECT season.HomeGoals FROM season WHERE season.MatchID=?",(matchID)).fetchone()[0]
+    awayGoals = db.execute("SELECT season.AwayGoals FROM season WHERE season.MatchID=?",(matchID)).fetchone()[0]
     goals = db.execute(
                     """SELECT events.Minute, players.short_name, players.ID, goals.was_Penalty, goals.was_Owngoal, gamer.TeamName
                     FROM events
