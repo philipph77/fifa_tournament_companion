@@ -6,6 +6,7 @@ from werkzeug.exceptions import BadRequestKeyError, abort
 from ftc.auth import login_required, admin_required
 from ftc.db import get_db
 
+from ftc.helper import getPositionsLineChartData
 from ftc.helper import calculateTables
 from ftc.helper import calculateScorerStats
 from ftc.helper import calculateCardStats
@@ -27,10 +28,16 @@ def index():
     teamId = g.gamer['ID']
 
     table, _, _ = calculateTables(db)
-    tablePlace = table[table['Team']==teamName].index.values[0]
-    points = table[table['Team']==teamName].Points.values[0]
-    scoredGoals = table[table['Team']==teamName].Goals_For.values[0]
-    receivedGoals = table[table['Team']==teamName].Goals_Against.values[0]
+
+    tablePlace = table.loc[table.Team==teamName].index[0]
+    points = table.loc[table.Team==teamName, "Points"].values[0]
+    scoredGoals = table.loc[table.Team==teamName, "Goals For"].values[0]
+    receivedGoals = table.loc[table.Team==teamName, "Goals Against"].values[0]
+    
+    #tablePlace = table[table['Team']==teamName].index.values[0]
+    #points = table[table['Team']==teamName].Points.values[0]
+    #scoredGoals = table[table['Team']==teamName].Goals_For.values[0]
+    #receivedGoals = table[table['Team']==teamName].Goals_Against.values[0]
 
     marketValue = getMarketValueOfTeam(db, teamId)
     teamStrength = getStrengthOfTeam(db, teamId)
@@ -48,8 +55,9 @@ def standings():
     table, homeTable, awayTable = calculateTables(db)
     scorerTable, assistTable, penaldoTable = calculateScorerStats(db)
     yellowCards, redCards = calculateCardStats(db)
+    lineChartLabels, lineChartPositions = getPositionsLineChartData(db)
 
-    return render_template('dashboard/standings.html', table=table, homeTable=homeTable, awayTable=awayTable, scorerTable=scorerTable, assistTable=assistTable, penaldoTable=penaldoTable, yellowCards=yellowCards, redCards=redCards)
+    return render_template('dashboard/standings.html', table=table, homeTable=homeTable, awayTable=awayTable, scorerTable=scorerTable, assistTable=assistTable, penaldoTable=penaldoTable, yellowCards=yellowCards, redCards=redCards, positionsChartData=lineChartPositions, lineChartLabels=lineChartLabels)
 
 @bp.route('/schedule')
 @login_required

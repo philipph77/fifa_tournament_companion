@@ -2,9 +2,75 @@
 
 {% block title %}Standings{% endblock %}
 
+{%block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+{% endblock %}
+
 {% block content %}
 <h1 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">Standings</h1>
-<!-- table=table, homeTable=homeTable, awayTable=awayTable, scorerTable=scorerTable, assistTable=assistTable, penaldoTable=penaldoTable, yellowCards=yellowCards, redCards=redCards -->
+
+<!-- Line Chart -->
+<canvas id="PositionslineChart" width="900" height="400"></canvas>
+<script>
+    var ctx = document.getElementById("PositionslineChart").getContext("2d");
+    var lineChart = new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: {{lineChartLabels}},
+            datasets: [
+                {% for datum in positionsChartData %}
+                    {
+                        label: "{{datum['name']}}",
+                        data: {{datum['positions']}},
+                        borderColor: "{{datum['color']}}",
+                        backgroundColor: "{{datum['color']}}"
+                    },
+                {% endfor %}
+            ]
+        },
+        options: {
+            elements:{
+                line: {
+                    tension: 0.,
+                    fill: false,
+                }
+            },
+            scales: {
+                yAxes: [{
+                    display: true,
+                    ticks: {
+                        beginAtZero: false,
+                        reverse: true,
+                        suggestedMin: 1,
+                        stepSize: 1
+                    },
+                    scaleLabel: {
+                        display: true,
+                        labelString: "Position"
+                    }
+                }],
+                xAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: "Matchday"
+                    }
+                }]
+            },
+            tooltips: {
+                mode: 'index',
+                intersect: false,
+            },
+            hover: {
+                mode: 'nearest',
+                intersect: true,
+            },
+            legend: {
+                position: 'bottom'
+            }
+            }
+    });
+</script>
 <h2 class="my-6 text-xl font-semibold text-gray-700 dark:text-gray-200">Overall Table</h2>
 {{ table.to_html(classes="w-full whitespace-no-wrap") | safe}}
 

@@ -13,7 +13,7 @@ def getTeamStats(db, gamerID):
 
 def calculateTables(db):
      # Punkte, Tore, Gegentore, Siege, Unentschieden, Niederlagen
-    table_column_names = ['Team', 'GamesPlayed', 'Wins', 'Draws', 'Losses', 'Goals_For', 'Goals_Against', 'Goal_Difference', 'Points']
+    table_column_names = ['Team', 'Games Played', 'Wins', 'Draws', 'Losses', 'Goals For', 'Goals Against', 'Goal Difference', 'Points']
     table = pd.DataFrame(columns=table_column_names)
     home_table = pd.DataFrame(columns=table_column_names)
     away_table = pd.DataFrame(columns=table_column_names)
@@ -54,43 +54,43 @@ def calculateTables(db):
         total_against_goals = home_against_goals + away_against_goals
         table = table.append({
             'Team': team_name,
-            'GamesPlayed': total_games_played,
+            'Games Played': total_games_played,
             'Wins': total_wins,
             'Draws': total_draws,
             'Losses': total_defeats,
-            'Goals_For': total_scored_goals,
-            'Goals_Against': total_against_goals,
-            'Goal_Difference': total_scored_goals- total_against_goals,
+            'Goals For': total_scored_goals,
+            'Goals Against': total_against_goals,
+            'Goal Difference': total_scored_goals- total_against_goals,
             'Points': total_points
             },
             ignore_index=True)
-        table.sort_values(by=['Points', 'Goal_Difference', 'Goals_For', 'Wins'], ascending=False, inplace=True)
+        table.sort_values(by=['Points', 'Goal Difference', 'Goals For', 'Wins'], ascending=False, inplace=True)
         home_table = home_table.append({
             'Team': team_name,
-            'GamesPlayed': home_games_played,
+            'Games Played': home_games_played,
             'Wins': home_wins,
             'Draws': home_draws,
             'Losses': home_defeats,
-            'Goals_For': home_scored_goals,
-            'Goals_Against': home_against_goals,
-            'Goal_Difference': home_scored_goals- home_against_goals,
+            'Goals For': home_scored_goals,
+            'Goals Against': home_against_goals,
+            'Goal Difference': home_scored_goals- home_against_goals,
             'Points': home_points
             },
             ignore_index=True)
-        home_table.sort_values(by=['Points', 'Goal_Difference', 'Goals_For', 'Wins'], ascending=False, inplace=True)
+        home_table.sort_values(by=['Points', 'Goal Difference', 'Goals For', 'Wins'], ascending=False, inplace=True)
         away_table = away_table.append({
             'Team': team_name,
-            'GamesPlayed': away_games_played,
+            'Games Played': away_games_played,
             'Wins': away_wins,
             'Draws': away_draws,
             'Losses': away_defeats,
-            'Goals_For': away_scored_goals,
-            'Goals_Against': away_against_goals,
-            'Goal_Difference': away_scored_goals- away_against_goals,
+            'Goals For': away_scored_goals,
+            'Goals Against': away_against_goals,
+            'Goal Difference': away_scored_goals- away_against_goals,
             'Points': away_points
             },
             ignore_index=True)
-        away_table.sort_values(by=['Points', 'Goal_Difference', 'Goals_For', 'Wins'], ascending=False, inplace=True)
+        away_table.sort_values(by=['Points', 'Goal Difference', 'Goals For', 'Wins'], ascending=False, inplace=True)
     
     table.reset_index(drop=True, inplace=True)
     table.index +=1
@@ -223,8 +223,8 @@ def getNextGamesOfTeam(db, teamId):
                         LEFT JOIN gamer team1 ON season.HomeTeamID=team1.ID
                         LEFT JOIN gamer team2 ON season.AwayTeamID=team2.ID
                         WHERE season.Is_Finished=0
-                        AND season.HomeTeamID=?
-                        OR season.AwayTeamID=?
+                        AND (season.HomeTeamID=?
+                        OR season.AwayTeamID=?)
                         LIMIT 10''',
                         (teamId, teamId)
                     )
@@ -240,3 +240,61 @@ def downloadPlayerImage(playerID, faceImageUrl):
         return 1
     else:
         return 0
+
+
+def updateTableforMatchDay(db, matchDay, table):
+    games = db.execute("SELECT HomeTeamID, AwayTeamID, Result, HomeGoals, AwayGoals FROM season WHERE MatchDay=?",(matchDay,)).fetchall()
+    for game in games:
+        # Adujust Scored Goals and Goal Difference
+        table.loc[table.teamID==game['HomeTeamID'], "ScoredGoals"] += game["HomeGoals"]
+        table.loc[table.teamID==game['HomeTeamID'], "GoalDifference"] += game["HomeGoals"] - game["AwayGoals"]
+        table.loc[table.teamID==game['AwayTeamID'], "ScoredGoals"] += game["AwayGoals"]
+        table.loc[table.teamID==game['AwayTeamID'], "GoalDifference"] += game["AwayGoals"] - game["HomeGoals"]
+        if game['Result'] == 0:
+            # Draw
+            table.loc[table.teamID==game['HomeTeamID'], "Points"] += 1
+            table.loc[table.teamID==game['AwayTeamID'], "Points"] += 1
+        elif game['Result'] == 1:
+            # Home Team Won
+            table.loc[table.teamID==game['HomeTeamID'], "Points"] += 3
+            table.loc[table.teamID==game['HomeTeamID'], "Wins"] += 1
+        elif game['Result'] == 2:
+            # Away Team Won
+            table.loc[table.teamID==game['AwayTeamID'], "Points"] += 3
+            table.loc[table.teamID==game['AwayTeamID'], "Wins"] += 1
+        else:
+            raise NotImplementedError
+    
+    table.sort_values(by=['Points', 'GoalDifference', 'ScoredGoals', 'Wins'], ascending=False, inplace=True)
+    table.reset_index(drop=True, inplace=True)
+    table.index +=1
+
+    return table
+
+
+def getPositionsLineChartData(db):
+    maxMatchDay = db.execute("SELECT MAX(MatchDay) FROM season WHERE Is_Finished=1").fetchone()[0]
+    teams = db.execute("SELECT ID, TeamName FROM gamer").fetchall()
+    colors = ["#7f1d1d", "#7c2d12", "#78350f", "#365314", "#064e3b", "#164e63", "#1e3a8a", "#4c1d95", "#701a75", "#881337"]
+    # prepare Table
+    teamsData = db.execute("SELECT ID, 0, 0, 0, 0 FROM gamer").fetchall()
+    table = pd.DataFrame(teamsData, columns=["teamID", "Points", "GoalDifference", "ScoredGoals", "Wins"])
+    table.index +=1
+    lineChartLabels = list(range(1, maxMatchDay+1))
+    # prepare LineCharts Datasets
+    lineChartDatasets = []
+    for i,team in enumerate(teams):
+        lineChartDatasets.append({
+            "teamID": team["ID"],
+            "name": team["TeamName"],
+            "positions": [],
+            "color": colors[i%10]
+        })
+
+    for matchDay in range(1,maxMatchDay+1):
+        table = updateTableforMatchDay(db, matchDay, table)
+        for team in lineChartDatasets:
+            team["positions"].append(table.loc[table.teamID==team["teamID"]].index[0])
+
+
+    return lineChartLabels, lineChartDatasets
