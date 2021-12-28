@@ -80,6 +80,9 @@
 <h2 class="my-6 text-xl font-semibold text-gray-700 dark:text-gray-200">Away Table</h2>
 {{ awayTable.to_html(classes="w-full whitespace-no-wrap") | safe}}
 
+<h2 class="my-6 text-xl font-semibold text-gray-700 dark:text-gray-200">Fairness Table</h2>
+{{ fairnessTable.to_html(classes="w-full whitespace-no-wrap") | safe}}
+
 <h2 class="my-6 text-xl font-semibold text-gray-700 dark:text-gray-200">Top Scorer</h2>
 {{ scorerTable.to_html(classes="w-full whitespace-no-wrap") | safe}}
 
@@ -90,9 +93,6 @@
 
 <h2 class="my-6 text-xl font-semibold text-gray-700 dark:text-gray-200">Top Penaldo</h2>
 {{ penaldoTable.to_html(classes="w-full whitespace-no-wrap") | safe}}
-
-<h2 class="my-6 text-xl font-semibold text-gray-700 dark:text-gray-200">Fairness Table</h2>
-{{ fairnessTable.to_html(classes="w-full whitespace-no-wrap") | safe}}
 
 <h2 class="my-6 text-xl font-semibold text-gray-700 dark:text-gray-200">Yellow Cards</h2>
 {{ yellowCards.to_html(classes="w-full whitespace-no-wrap") | safe}}
