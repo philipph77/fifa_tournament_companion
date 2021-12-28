@@ -121,20 +121,49 @@ def calculateScorerStats(db):
     return scorer, assist, penaldo
 
 def calculateCardStats(db):
+    # cardCategories:
+    # 1 - Yellow Card,
+    # 3 - YellowRed Card,
+    # 5 - Red Card
     gamer_ids = db.execute('SELECT ID FROM gamer').fetchall()
     gamer_ids = [int(id[0]) for id in gamer_ids]
-    yellow_cards = db.execute('SELECT players.short_name, COUNT(*) AS `points` FROM cards LEFT JOIN players on players.ID = cards.ReceivingPlayer WHERE cards.wasYellowCard=1 GROUP BY ReceivingPlayer ORDER BY points DESC LIMIT 10')
+    yellow_cards = db.execute('SELECT players.short_name, COUNT(*) AS `points` FROM cards LEFT JOIN players on players.ID = cards.ReceivingPlayer WHERE cards.cardCategory=1 GROUP BY ReceivingPlayer ORDER BY points DESC LIMIT 10')
     yellow_cards = pd.DataFrame(data=yellow_cards.fetchall(), columns=['Name', 'Yellow Cards'])
     yellow_cards.sort_values(yellow_cards.columns[1], ascending=False, inplace=True)
     yellow_cards.reset_index(drop=True, inplace=True)
     yellow_cards.index +=1
-    red_cards = db.execute('SELECT players.short_name, COUNT(*) AS `points` FROM cards LEFT JOIN players on players.ID = cards.ReceivingPlayer WHERE cards.wasYellowCard=0 GROUP BY ReceivingPlayer ORDER BY points DESC LIMIT 10')
+    red_cards = db.execute('SELECT players.short_name, COUNT(*) AS `points` FROM cards LEFT JOIN players on players.ID = cards.ReceivingPlayer WHERE cards.cardCategory=5 GROUP BY ReceivingPlayer ORDER BY points DESC LIMIT 10')
     red_cards = pd.DataFrame(data=red_cards.fetchall(), columns=['Name', 'Red Cars'])
     red_cards.sort_values(red_cards.columns[1], ascending=False, inplace=True)
     red_cards.reset_index(drop=True, inplace=True)
     red_cards.index +=1
     
     return yellow_cards, red_cards
+
+def calculateFairnessTable(db):
+    # cardCategories:
+    # 1 - Yellow Card,
+    # 3 - YellowRed Card,
+    # 5 - Red Card
+    stats = db.execute(
+        """SELECT gamer.TeamName,
+        SUM(cards.cardCategory) as points,
+        SUM(cards.cardCategory=5) as reds,
+        SUM(cards.cardCategory=3) as yrs,
+        SUM(cards.cardCategory=1) as yellows
+        FROM gamer
+        LEFT JOIN team_player ON gamer.ID= team_player.teamID
+        LEFT JOIN cards ON cards.ReceivingPlayer=team_player.playerID
+        GROUP BY team_player.teamID
+        ORDER BY points, reds, yrs, yellows ASC"""
+    ).fetchall()
+    statsDf = pd.DataFrame(data=stats, columns=["Team Name", "Points", "Red Cards", "Yellow-Red Cards", "Yellow Cards"])
+    statsDf.fillna(0, inplace=True, downcast='infer')
+    statsDf.sort_values(["Points", "Red Cards", "Yellow-Red Cards", "Yellow Cards"], ascending=False, inplace=True)
+    statsDf.reset_index(drop=True, inplace=True)
+    statsDf.index +=1
+    return statsDf
+
 
 
 def getWholeSchedule(db):

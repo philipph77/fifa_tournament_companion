@@ -10,6 +10,7 @@ from ftc.helper import getPositionsLineChartData
 from ftc.helper import calculateTables
 from ftc.helper import calculateScorerStats
 from ftc.helper import calculateCardStats
+from ftc.helper import calculateFairnessTable
 from ftc.helper import getWholeSchedule
 from ftc.helper import getUpcomingGames
 from ftc.helper import generateSchedule
@@ -56,8 +57,9 @@ def standings():
     scorerTable, assistTable, penaldoTable = calculateScorerStats(db)
     yellowCards, redCards = calculateCardStats(db)
     lineChartLabels, lineChartPositions = getPositionsLineChartData(db)
+    fairnessTable = calculateFairnessTable(db)
 
-    return render_template('dashboard/standings.html', table=table, homeTable=homeTable, awayTable=awayTable, scorerTable=scorerTable, assistTable=assistTable, penaldoTable=penaldoTable, yellowCards=yellowCards, redCards=redCards, positionsChartData=lineChartPositions, lineChartLabels=lineChartLabels)
+    return render_template('dashboard/standings.html', table=table, homeTable=homeTable, awayTable=awayTable, scorerTable=scorerTable, assistTable=assistTable, penaldoTable=penaldoTable, yellowCards=yellowCards, redCards=redCards, positionsChartData=lineChartPositions, lineChartLabels=lineChartLabels, fairnessTable=fairnessTable)
 
 @bp.route('/schedule')
 @login_required
@@ -93,7 +95,7 @@ def add_results():
         numberOfCards = int(request.form['cards'])
         cardsData = []
         for i in range(1, numberOfCards+1):
-            cardsData.append( (int(request.form['cardPlayer-%i'%i]), int(request.form['cardMinute-%i'%i]), int(request.form['cardWasYellow-%i'%i])) )
+            cardsData.append( (int(request.form['cardPlayer-%i'%i]), int(request.form['cardMinute-%i'%i]), int(request.form['cardCategory-%i'%i])) )
         goalsData = []
         for i in range(1, homeGoals+1):
             try:
@@ -141,7 +143,7 @@ def add_results():
 
     for cardData in cardsData:
         cardId = db.execute('INSERT INTO events (MatchID, Minute, eventCategoryID) VALUES (?, ?, ?) RETURNING eventID',(matchID, cardData[1], 2)).fetchone()
-        db.execute('INSERT INTO cards (ID, ReceivingPlayer, wasYellowCard) VALUES (?, ?, ?)',(cardId[0], cardData[0], cardData[2]))
+        db.execute('INSERT INTO cards (ID, ReceivingPlayer, cardCategory) VALUES (?, ?, ?)',(cardId[0], cardData[0], cardData[2]))
 
     for goalData in goalsData:
         goalId = db.execute('INSERT INTO events (MatchID, Minute, eventCategoryID) VALUES (?, ?, ?) RETURNING eventID',(matchID, goalData[1], 1)).fetchone()
