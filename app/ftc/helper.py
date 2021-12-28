@@ -159,7 +159,7 @@ def calculateFairnessTable(db):
     ).fetchall()
     statsDf = pd.DataFrame(data=stats, columns=["Team Name", "Points", "Red Cards", "Yellow-Red Cards", "Yellow Cards"])
     statsDf.fillna(0, inplace=True, downcast='infer')
-    statsDf.sort_values(["Points", "Red Cards", "Yellow-Red Cards", "Yellow Cards"], ascending=False, inplace=True)
+    statsDf.sort_values(["Points", "Red Cards", "Yellow-Red Cards", "Yellow Cards"], ascending=True, inplace=True)
     statsDf.reset_index(drop=True, inplace=True)
     statsDf.index +=1
     return statsDf
