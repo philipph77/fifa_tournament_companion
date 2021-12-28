@@ -35,4 +35,7 @@ def create_app(test_config=None):
     from . import ajax
     app.register_blueprint(ajax.bp)
 
+    from . import subpages
+    app.register_blueprint(subpages.bp)
+
     return app

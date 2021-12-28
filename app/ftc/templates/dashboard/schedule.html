@@ -1,5 +1,27 @@
 {% extends 'base.html' %}
 
+{% block head %}
+<script>
+$(document).ready(function() {
+    const table = document.getElementsByClassName('wholeScheduleTable')[0];
+    const tbody = table.tBodies[0]
+    const rows = tbody.getElementsByTagName('tr');
+    for (let i=0; i<rows.length; i++)
+    {
+        const columns = rows[i].getElementsByTagName("td");
+        const lastColumn = columns[columns.length - 1];
+        if(lastColumn.innerHTML==0){
+            lastColumn.innerHTML = '<button class="px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-md opacity-50 cursor-not-allowed focus:outline-none">Report</button>'
+        }
+        else{
+            matchID = lastColumn.innerHTML
+            lastColumn.innerHTML = '<a href="{{url_for('subpages.matchReport')}}?matchID='+matchID+'"><button class="px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">Report</button></a>'
+        }
+    }
+});
+</script>
+{% endblock %}
+
 {% block title %}Schedule{% endblock %}
 
 {% block content %}
@@ -8,6 +30,6 @@
 {{ upcomingGames.to_html(index=False, classes="w-full whitespace-no-wrap") | safe}}
 
 <h2 class="my-6 text-xl font-semibold text-gray-700 dark:text-gray-200">Whole Schedule</h2>
-{{ wholeSchedule.to_html(index=False, classes="w-full whitespace-no-wrap") | safe}}
+{{ wholeSchedule.to_html(index=False, classes="w-full whitespace-no-wrap wholeScheduleTable") | safe}}
 
 {% endblock %}

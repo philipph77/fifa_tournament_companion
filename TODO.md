@@ -15,3 +15,4 @@
 - [x] Admintools: Improve Styling
 - [x] Admintools: Add DeleteResult
 - [x] Overview: Add Line Chart with position over matchdays
+- [x] App: Match Reports for finished Games

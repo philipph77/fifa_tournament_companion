@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block title %}Match Report{% endblock %}
+
+{% block content %}
+<h1 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">{{homeTeam}} {{homeGoals}}:{{awayGoals}} {{awayTeam}}</h1>
+<h2 class="my-6 text-xl font-semibold text-gray-700 dark:text-gray-200">Goals</h2>
+{% for goal in goals %}
+    <div class="flex items-center p-4 mb-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
+        <div class="p-3 mr-4">
+          <img src="{{url_for('static', filename='faces/' + goal['ID']|string + '.png')}}" width="64px", height="64px;">
+        </div>
+        <div>
+          <p class="text-lg font-medium text-gray-600 dark:text-gray-400">
+            {{goal['short_name']}}
+          </p>
+          <p class="mb-2 text-sm font-semibold text-gray-700 dark:text-gray-200">
+            {{goal['TeamName']}}
+          </p>
+          <div>
+              <p class="text-sm font-semibold text-gray-700 dark:text-gray-200">
+                  {{goal['Minute']}}. {% if goal['was_Penalty']%}(P){% endif %}{% if goal['was_Owngoal']%}(OG){% endif %}
+              </p>
+          </div>
+        </div>
+      </div>
+{% endfor %}
+
+<h2 class="my-6 text-xl font-semibold text-gray-700 dark:text-gray-200">Cards</h2>
+{% for card in cards %}
+    <div class="flex items-center p-4 mb-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
+        <div class="p-3 mr-4">
+          <img src="{{url_for('static', filename='faces/' + card['ID']|string + '.png')}}" width="64px", height="64px;">
+        </div>
+        <div>
+          <p class="text-lg font-medium text-gray-600 dark:text-gray-400">
+            {{card['short_name']}}
+          </p>
+          <p class="mb-2 text-sm font-semibold text-gray-700 dark:text-gray-200">
+            {{card['TeamName']}}
+          </p>
+          <div>
+              <p class="text-sm font-semibold text-gray-700 dark:text-gray-200">
+                {{card['Minute']}}. {% if card['cardCategory']==1%}(Yellow Card){% endif %}{% if card['cardCategory']==3%}(Yellow-Red Card){% endif %}{% if card['cardCategory']==5%}(Red Card){% endif %}  
+              </p>
+          </div>
+        </div>
+      </div>
+{% endfor %}
+
+{% endblock %}

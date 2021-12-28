@@ -168,12 +168,18 @@ def calculateFairnessTable(db):
 
 def getWholeSchedule(db):
     schedule = db.execute('''
-        SELECT MatchDay, team1.TeamName, team2.TeamName, ifnull(HomeGoals, '-' ), ifnull(AwayGoals, '-' )
+        SELECT MatchDay, team1.TeamName, team2.TeamName, ifnull(HomeGoals, '-' ), ifnull(AwayGoals, '-' ),
+        CAST(
+             CASE
+                  WHEN season.Is_Finished=0
+                     THEN 0
+                  ELSE season.MatchID
+             END AS bit) as ReportID
         FROM season
         LEFT JOIN gamer team1 ON season.HomeTeamID=team1.ID
         LEFT JOIN gamer team2 ON season.AwayTeamID=team2.ID
     ''')
-    schedule = pd.DataFrame(data=schedule.fetchall(), columns=[ 'MatchDay', 'HomeTeam', 'AwayTeam', 'HomeGoals', 'AwayGoals'])
+    schedule = pd.DataFrame(data=schedule.fetchall(), columns=[ 'MatchDay', 'HomeTeam', 'AwayTeam', 'HomeGoals', 'AwayGoals', 'Match Report'])
     
     return schedule
 
