@@ -38,4 +38,7 @@ def create_app(test_config=None):
     from . import subpages
     app.register_blueprint(subpages.bp)
 
+    from . import profile
+    app.register_blueprint(profile.bp)
+
     return app

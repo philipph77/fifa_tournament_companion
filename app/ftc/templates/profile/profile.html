@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<h1 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+    {{gamer['TeamName']}} ({{gamer['FirstName']}} {{gamer['LastName']}})
+</h1>
+
+<h2 class="my-6 text-xl font-semibold text-gray-700 dark:text-gray-200">Team Stats</h2>
+<div class="grid gap-6 mb-8 md:grid-cols-2">
+    <div class="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
+      <h4 class="mb-4 font-semibold text-gray-600 dark:text-gray-300">
+        Market Value
+      </h4>
+      <h1 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200" style="font-size: 2.5rem; text-align: center;">{{"{:,} €".format(marketValue)}}</h1>
+    </div>
+    <div class="min-w-0 p-4 text-white bg-purple-600 rounded-lg shadow-xs">
+      <h4 class="mb-4 font-semibold">
+        Average Strength
+      </h4>
+      <h1 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200" style="font-size: 2.5rem; text-align: center;">{{"{:4.2f}".format(teamStrength)}}</h1>
+    </div>
+</div>
+
+<h2 class="my-6 text-xl font-semibold text-gray-700 dark:text-gray-200">Players</h2>
+<div class="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
+    {% for player in players %}
+        <!-- Card -->
+        <div class="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
+          <!-- <div class="p-3 mr-4 text-orange-500 bg-orange-100 rounded-full dark:text-orange-100 dark:bg-orange-500"> -->
+          <div class="p-3 mr-4">
+            <img src="{{url_for('static', filename='faces/' + player[3]|string + '.png')}}" width="64px", height="64px;">
+          </div>
+          <div>
+            <p class="mb-2 text-lg font-medium text-gray-600 dark:text-gray-400">
+              {{player[0]}}
+            </p>
+            <div>
+                <p class="text-sm font-semibold text-gray-700 dark:text-gray-200">
+                    {{player[2]}}
+                </p>
+                <p class="text-sm font-semibold text-gray-700 dark:text-gray-200">
+                {{player[1]}}
+                </p>
+            </div>
+          </div>
+        </div>
+    
+    {% endfor %}
+    </div>
+{% endblock %}
