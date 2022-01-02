@@ -1,6 +1,6 @@
 # FIFA Tournament Companion (FTC)
 
-FIFA Tournament Companion (FTC) is a tool for all you FIFA fools. It helps you to track all kinds of relevant and irrelevant information about your tournament.
+FIFA Tournament Companion (FTC) is a tool for all you FIFA fools. It is designed to help you track all kinds of relevant and irrelevant information about your tournament. Currently it can generate a schedule, store the players for each team, store match results aswell as a short match report (goals and cards).
 
 ## Installation
 
@@ -68,6 +68,9 @@ Please make sure to update tests as appropriate.
 ## Credits
 - [Windmill Template](https://github.com/estevanmaito/windmill-dashboard)
 - [Generate Season Algorithm](https://gist.github.com/ih84ds/be485a92f334c293ce4f1c84bfba54c9)
+
+## Disclaimer
+If you add players to a team, the player images are automatically downloaded from sofifa.com. The download and use of the images is done at your own risk! We do not own copyright to those images.
 
 ## License
 [CCO](https://choosealicense.com/licenses/cc0-1.0/)
